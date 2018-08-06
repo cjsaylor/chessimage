@@ -45,8 +45,6 @@ renderer.Render(options)
 
 #### AssetPath (**Required**)
 
-**Required**
-
 Specify the path of the image assets for the individual pieces. Feel free to use the assets packaged in this repo, but be aware they are under CC license.
 
 #### Resizer (`draw.CatmullRom`)
