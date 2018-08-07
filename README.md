@@ -4,13 +4,11 @@
 
 [![GoDoc](https://godoc.org/github.com/cjsaylor/chessimage?status.svg)](https://godoc.org/github.com/cjsaylor/chessimage)
 
-![](./docs/board_with_moves.png)
+![](./docs/starting_board.png)
 
-> FEN Notation: `rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1`
->
-> `go run examples/board_with_moves.go | open -f -a /Applications/Preview.app/`
+> `go run examples/starting_board.go | open -f -a /Applications/Preview.app/`
 
-## Usage
+## Basic Usage
 
 Include in your go path.
 
@@ -21,7 +19,7 @@ go get github.com/cjsaylor/chessimage
 Initialize the renderer with a FEN notation.
 
 ```go
-board, _ := chessimage.NewRendererFromFEN("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1")
+board, _ := chessimage.NewRendererFromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
 ```
 
 Render the chess board to a png `image.Image` interface.
@@ -32,6 +30,33 @@ defer f.Close()
 image, _ := board.Render(chessimage.Options{AssetPath: "./assets/")})
 png.Encode(f, image)
 ```
+
+## Highlighting LastMove
+
+You can highlight tiles of where a move started and ended.
+
+```go
+board.SetLastMove(chessimage.LastMove{
+	From: chessimage.E4,
+	To: chessimage.E2,
+})
+```
+
+[Example](./blob/master/examples/board_with_moves.go)
+
+![](./docs/board_with_moves.png)
+
+## Mark Checked
+
+You can highlight a tile as "checked".
+
+```go
+board.SetCheckTile(chessimage.G1)
+```
+
+[Example](./blob/master/examples/king_checked.go)
+
+![](./docs/king_checked.png)
 
 ## Options
 
@@ -60,17 +85,7 @@ Square board size in pixels
 
 Size of the pieces relative as a percentage to the game board tile size. If the game board size is `800`, each board tile would be `100` pixels wide, and the pieces would render at `80` pixels with the default ratio.
 
-#### LastMove (`nil`)
-
-Set of tiles to highlight on the board.
-
-```go
-// Example highlight tiles E2 and E4
-options := chessimage.Options{
-    LastMove: &chessimage.LastMove{ chessImage.E2, chessImage.E4 }
-}
-```
-
 ## Todo
 
 * Add support for `PGN` notation for rendering a board (similar to the `FEN` notation setup now)
+* Add configuration support for changing board and tile highlight colors

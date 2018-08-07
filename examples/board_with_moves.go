@@ -15,12 +15,12 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
+	board.SetLastMove(chessimage.LastMove{
+		From: chessimage.E2,
+		To:   chessimage.E4,
+	})
 	image, err := board.Render(chessimage.Options{
 		AssetPath: "./assets/",
-		LastMove: &chessimage.LastMove{
-			From: chessimage.E2,
-			To:   chessimage.E4,
-		},
 	})
 	if err != nil {
 		log.Fatalln(err)
