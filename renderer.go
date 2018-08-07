@@ -36,6 +36,7 @@ var (
 	colorDark         = []int{180, 135, 102}
 	colorHighlight    = []int{205, 210, 122}
 	colorHighlightDim = []int{170, 160, 75}
+	colorCheck        = []int{227, 30, 32}
 )
 
 type drawSize struct {
@@ -54,9 +55,10 @@ type Options struct {
 
 // Renderer is responsible for rendering the board, pieces, rank/file, and tile highlights
 type Renderer struct {
-	context  *gg.Context
-	board    board
-	drawSize drawSize
+	context   *gg.Context
+	board     board
+	drawSize  drawSize
+	checkTile Tile
 }
 
 // NewRendererFromFEN prepares a renderer for use with given FEN string
@@ -66,8 +68,14 @@ func NewRendererFromFEN(fen string) (*Renderer, error) {
 		return nil, err
 	}
 	return &Renderer{
-		board: board,
+		board:     board,
+		checkTile: NoTile,
 	}, nil
+}
+
+func (r *Renderer) SetCheckTile(tile Tile) {
+	// @todo validate it is within the range of proper tiles
+	r.checkTile = tile
 }
 
 // Render the chess board with given items
@@ -87,6 +95,7 @@ func (r *Renderer) Render(options Options) (image.Image, error) {
 	if options.LastMove != nil {
 		r.highlightCells(options)
 	}
+	r.drawCheckTile()
 	r.drawRankFile(options)
 	if err := r.drawBoard(options); err != nil {
 		return nil, err
@@ -123,6 +132,21 @@ func (r *Renderer) highlightCells(o Options) {
 		float64(o.LastMove.To.rank()*gridSize),
 		float64(gridSize), float64(gridSize))
 	r.context.SetRGB255(colorHighlightDim[0], colorHighlightDim[1], colorHighlightDim[2])
+	r.context.Fill()
+}
+
+func (r *Renderer) drawCheckTile() {
+	if r.checkTile == NoTile {
+		return
+	}
+	gridSize := float64(r.drawSize.gridSize)
+	r.context.DrawRectangle(
+		float64(r.checkTile.file())*gridSize,
+		float64(r.checkTile.rank())*gridSize,
+		gridSize,
+		gridSize,
+	)
+	r.context.SetRGB255(colorCheck[0], colorCheck[1], colorCheck[2])
 	r.context.Fill()
 }
 
