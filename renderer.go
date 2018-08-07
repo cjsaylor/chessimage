@@ -32,9 +32,10 @@ const (
 )
 
 var (
-	colorLight     = []int{239, 218, 183}
-	colorDark      = []int{180, 135, 102}
-	colorHighlight = []int{205, 210, 122}
+	colorLight        = []int{239, 218, 183}
+	colorDark         = []int{180, 135, 102}
+	colorHighlight    = []int{205, 210, 122}
+	colorHighlightDim = []int{170, 160, 75}
 )
 
 type drawSize struct {
@@ -121,6 +122,7 @@ func (r *Renderer) highlightCells(o Options) {
 		float64(o.LastMove.To.file()*gridSize),
 		float64(o.LastMove.To.rank()*gridSize),
 		float64(gridSize), float64(gridSize))
+	r.context.SetRGB255(colorHighlightDim[0], colorHighlightDim[1], colorHighlightDim[2])
 	r.context.Fill()
 }
 
