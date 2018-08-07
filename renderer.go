@@ -50,7 +50,6 @@ type Options struct {
 	Resizer    draw.Scaler
 	BoardSize  int
 	PieceRatio float64
-	LastMove   *LastMove
 }
 
 // Renderer is responsible for rendering the board, pieces, rank/file, and tile highlights
@@ -59,6 +58,7 @@ type Renderer struct {
 	board     board
 	drawSize  drawSize
 	checkTile Tile
+	lastMove  *LastMove
 }
 
 // NewRendererFromFEN prepares a renderer for use with given FEN string
@@ -78,6 +78,10 @@ func (r *Renderer) SetCheckTile(tile Tile) {
 	r.checkTile = tile
 }
 
+func (r *Renderer) SetLastMove(lastMove LastMove) {
+	r.lastMove = &lastMove
+}
+
 // Render the chess board with given items
 func (r *Renderer) Render(options Options) (image.Image, error) {
 	if options.BoardSize <= 0 {
@@ -92,9 +96,7 @@ func (r *Renderer) Render(options Options) (image.Image, error) {
 	r.drawSize = calcDrawSize(options)
 	r.context = gg.NewContext(options.BoardSize, options.BoardSize)
 	r.drawBackground()
-	if options.LastMove != nil {
-		r.highlightCells(options)
-	}
+	r.highlightCells()
 	r.drawCheckTile()
 	r.drawRankFile(options)
 	if err := r.drawBoard(options); err != nil {
@@ -118,18 +120,21 @@ func (r *Renderer) drawBackground() {
 	}
 }
 
-func (r *Renderer) highlightCells(o Options) {
+func (r *Renderer) highlightCells() {
+	if r.lastMove == nil {
+		return
+	}
 	gridSize := r.drawSize.gridSize
 	r.context.DrawRectangle(
-		float64(o.LastMove.From.file()*gridSize),
-		float64(o.LastMove.From.rank()*gridSize),
+		float64(r.lastMove.From.file()*gridSize),
+		float64(r.lastMove.From.rank()*gridSize),
 		float64(gridSize),
 		float64(gridSize))
 	r.context.SetRGB255(colorHighlight[0], colorHighlight[1], colorHighlight[2])
 	r.context.Fill()
 	r.context.DrawRectangle(
-		float64(o.LastMove.To.file()*gridSize),
-		float64(o.LastMove.To.rank()*gridSize),
+		float64(r.lastMove.To.file()*gridSize),
+		float64(r.lastMove.To.rank()*gridSize),
 		float64(gridSize), float64(gridSize))
 	r.context.SetRGB255(colorHighlightDim[0], colorHighlightDim[1], colorHighlightDim[2])
 	r.context.Fill()
