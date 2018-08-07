@@ -2,6 +2,7 @@
 
 `chessimage` is a [golang](https://golang.org) library for rendering a chess board PNG in specific state.
 
+[![GoDoc](https://godoc.org/github.com/cjsaylor/chessimage?status.svg)](https://godoc.org/github.com/cjsaylor/chessimage)
 
 ![](./docs/board_with_moves.png)
 
