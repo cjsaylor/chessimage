@@ -29,7 +29,8 @@ type LastMove struct {
 }
 
 const (
-	A8 Tile = iota
+	NoTile Tile = iota - 1
+	A8
 	B8
 	C8
 	D8
