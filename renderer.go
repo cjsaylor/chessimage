@@ -25,10 +25,12 @@ var pieceNames = map[string]string{
 }
 
 const (
-	defaultBoardSize  = 512
-	defaultPieceRatio = 0.8
-	fileSymbols       = "abcdefgh"
-	rankSymbols       = "12345678"
+	defaultBoardSize   = 512
+	defaultPieceRatio  = 0.8
+	fileSymbols        = "abcdefgh"
+	fileSymbolsReverse = "hgfedcba"
+	rankSymbols        = "12345678"
+	rankSymbolsReverse = "87654321"
 )
 
 var (
@@ -200,7 +202,7 @@ func (r *Renderer) drawRankFile(o Options) error {
 	}
 
 	if o.Inverted {
-		symbols = reverse(fileSymbols)
+		symbols = fileSymbolsReverse
 	} else {
 		symbols = fileSymbols
 	}
@@ -218,7 +220,7 @@ func (r *Renderer) drawRankFile(o Options) error {
 	if o.Inverted {
 		symbols = rankSymbols
 	} else {
-		symbols = reverse(rankSymbols)
+		symbols = rankSymbolsReverse
 	}
 	for i, symbol := range symbols {
 		var color []int
@@ -275,12 +277,4 @@ func calcDrawSize(o Options) drawSize {
 		pieceSize:   int(pieceSize),
 		pieceOffset: int((gridSize - pieceSize) / 2),
 	}
-}
-
-func reverse(s string) string {
-	r := []rune(s)
-	for i, j := 0, len(r)-1; i < len(r)/2; i, j = i+1, j-1 {
-		r[i], r[j] = r[j], r[i]
-	}
-	return string(r)
 }
