@@ -3,31 +3,60 @@
 
 [[projects]]
   branch = "master"
+  digest = "1:2a5cf526ea79278733fdbe91b5c4274e584a4b2897f449dea9f93994829d24b9"
   name = "github.com/flopp/go-findfont"
   packages = ["."]
+  pruneopts = ""
   revision = "e788239e52bccbae8c957dbc5c4daeb4fcb9c38b"
 
 [[projects]]
+  digest = "1:93f24f4f38f63e3bfd60f7e6caa425d1d580c0070abfc0a99b9c4413dda23341"
   name = "github.com/fogleman/gg"
   packages = ["."]
-  revision = "a9ff18eccd6d57b3c8576a71a91a04868f62078c"
-  version = "v1.1.0"
+  pruneopts = ""
+  revision = "9db508d34a2da0d0a3244cf73bb605e2c00c6229"
+  version = "v1.2.0"
 
 [[projects]]
   branch = "master"
+  digest = "1:05f7dd1dc7530cd6b959f8b49660cd898f8dc9601b4e764ef9bdf211e6318774"
   name = "github.com/golang/freetype"
-  packages = ["raster","truetype"]
+  packages = [
+    "raster",
+    "truetype",
+  ]
+  pruneopts = ""
   revision = "e2365dfdc4a05e4b8299a783240d4a7d5a65d4e4"
 
 [[projects]]
   branch = "master"
+  digest = "1:0960a9f676f505c50b45b2db87151ef60991c6f4764083b02acfabf09bcdc5cc"
   name = "golang.org/x/image"
-  packages = ["draw","font","font/basicfont","font/plan9font","math/f64","math/fixed"]
+  packages = [
+    "draw",
+    "font",
+    "font/basicfont",
+    "font/plan9font",
+    "math/f64",
+    "math/fixed",
+  ]
+  pruneopts = ""
   revision = "c73c2afc3b812cdd6385de5a50616511c4a3d458"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "42df0b79cb6f72a2fbaa7e572bd9c0d622b6ab5ad5dfbd6ac9a12e56e8869f36"
+  input-imports = [
+    "github.com/flopp/go-findfont",
+    "github.com/fogleman/gg",
+    "github.com/golang/freetype/raster",
+    "github.com/golang/freetype/truetype",
+    "golang.org/x/image/draw",
+    "golang.org/x/image/font",
+    "golang.org/x/image/font/basicfont",
+    "golang.org/x/image/font/plan9font",
+    "golang.org/x/image/math/f64",
+    "golang.org/x/image/math/fixed",
+  ]
   solver-name = "gps-cdcl"
   solver-version = 1
