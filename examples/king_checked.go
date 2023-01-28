@@ -15,12 +15,14 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	board.SetLastMove(chessimage.LastMove{
-		From: chessimage.D7,
-		To:   chessimage.G4,
-	})
+	board.SetLastMove(
+		chessimage.LastMove{
+			From: chessimage.D7,
+			To:   chessimage.G4,
+		},
+	)
 	board.SetCheckTile(chessimage.G1)
-	image, err := board.Render(chessimage.Options{AssetPath: "./assets/"})
+	image, err := board.Render(chessimage.Options{})
 	if err != nil {
 		log.Fatalln(err)
 	}

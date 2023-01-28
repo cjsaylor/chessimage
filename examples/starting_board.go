@@ -1,3 +1,4 @@
+//go:build ignore
 // +build ignore
 
 package main
@@ -15,9 +16,7 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	image, err := board.Render(chessimage.Options{
-		AssetPath: "./assets/",
-	})
+	image, err := board.Render(chessimage.Options{})
 	if err != nil {
 		log.Fatalln(err)
 	}

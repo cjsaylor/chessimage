@@ -14,7 +14,7 @@ func main() {
 		log.Fatalln(err)
 	}
 	board.SetLastMove(chessimage.LastMove{MoveType: chessimage.MoveTypeCastlingWK})
-	image, err := board.Render(chessimage.Options{AssetPath: "./assets/"})
+	image, err := board.Render(chessimage.Options{})
 	if err != nil {
 		log.Fatalln(err)
 	}
