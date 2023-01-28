@@ -1,8 +1,8 @@
 package chessimage
 
 import (
+	"bytes"
 	"image"
-	"log"
 
 	findfont "github.com/flopp/go-findfont"
 	"github.com/fogleman/gg"
@@ -22,6 +22,21 @@ var pieceNames = map[string]string{
 	"Q": "ql.png",
 	"r": "rd.png",
 	"R": "rl.png",
+}
+
+var pieces = map[string][]byte{
+	"b": blackBishop,
+	"B": whiteBishop,
+	"k": blackKing,
+	"K": whiteKing,
+	"n": blackKnight,
+	"N": whiteKnight,
+	"p": blackPawn,
+	"P": whitePawn,
+	"q": blackQueen,
+	"Q": whiteQueen,
+	"r": blackRook,
+	"R": whiteRook,
 }
 
 const (
@@ -253,14 +268,21 @@ func (r *Renderer) drawRankFile(o Options) error {
 
 func (r *Renderer) drawPiece(piece position, assetPath string, resizer draw.Scaler, inverted bool) error {
 	// Todo move this to runtime cache function
-	png, err := gg.LoadPNG(assetPath + pieceNames[string(piece.pieceSymbol)])
+
+	var png image.Image
+	var err error
+
+	if assetPath == "" {
+		rr := bytes.NewReader(pieces[piece.pieceSymbol])
+		png, _, err = image.Decode(rr)
+	} else {
+		png, err = gg.LoadPNG(assetPath + pieceNames[piece.pieceSymbol])
+	}
 	if err != nil {
 		return err
 	}
+
 	resized := resizeImage(png, r.drawSize, resizer)
-	if err != nil {
-		log.Fatal(err)
-	}
 	gridSize := r.drawSize.gridSize
 	pieceOffset := r.drawSize.pieceOffset
 

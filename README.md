@@ -22,12 +22,21 @@ Initialize the renderer with a FEN notation.
 board, _ := chessimage.NewRendererFromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
 ```
 
-Render the chess board to a png `image.Image` interface.
+Render the chess board to a png `image.Image` interface. This will use the internal (embedded) images, that are licensed under the CC license (see ./assets/license.md)
 
 ```go
 f, _ := os.Create("board.png")
 defer f.Close()
-image, _ := board.Render(chessimage.Options{AssetPath: "./assets/")})
+image, _ := board.Render(chessimage.Options{})
+png.Encode(f, image)
+```
+
+If you want to use your own chess piece images, provide a path to an asset folder:
+
+```go
+f, _ := os.Create("board.png")
+defer f.Close()
+image, _ := board.Render(chessimage.Options{AssetPath: "./assets/"})
 png.Encode(f, image)
 ```
 
@@ -81,9 +90,9 @@ options := chessimage.Options{
 renderer.Render(options)
 ```
 
-#### AssetPath (**Required**)
+#### AssetPath
 
-Specify the path of the image assets for the individual pieces. Feel free to use the assets packaged in this repo, but be aware they are under CC license.
+Specify the path of the image assets for the individual pieces. Feel free to use the assets embedded in this repo, but be aware they are under CC license.
 
 #### Inverted (`false`)
 

@@ -1,3 +1,4 @@
+//go:build ignore
 // +build ignore
 
 package main
@@ -15,13 +16,13 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	board.SetLastMove(chessimage.LastMove{
-		From: chessimage.E2,
-		To:   chessimage.E4,
-	})
-	image, err := board.Render(chessimage.Options{
-		AssetPath: "./assets/",
-	})
+	board.SetLastMove(
+		chessimage.LastMove{
+			From: chessimage.E2,
+			To:   chessimage.E4,
+		},
+	)
+	image, err := board.Render(chessimage.Options{})
 	if err != nil {
 		log.Fatalln(err)
 	}
