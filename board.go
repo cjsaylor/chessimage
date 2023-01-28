@@ -5,20 +5,12 @@ import "fmt"
 // Tile represents a specific position of a tile on a chess board
 type Tile int8
 
-func (s Tile) rank() int {
-	return int(int(s) / 8)
+func (t Tile) rankFile() (int, int) {
+	return int(t) / 8, int(t) % 8
 }
 
-func (s Tile) rankInverted() int {
-	return 7 - s.rank()
-}
-
-func (s Tile) file() int {
-	return int(s) % 8
-}
-
-func (s Tile) fileInverted() int {
-	return 7 - s.file()
+func (t Tile) rankFileInv() (int, int) {
+	return 7 - int(t)/8, 7 - int(t)%8
 }
 
 func tileFromRankFile(rank int, file int) Tile {
@@ -32,13 +24,24 @@ type position struct {
 
 type board []position
 
-//LastMove represents two tiles that indicate a piece was moved
+type MoveType int
+
+const (
+	MoveTypeStandard MoveType = iota
+	MoveTypeCastlingWK
+	MoveTypeCastlingWQ
+	MoveTypeCastlingBK
+	MoveTypeCastlingBQ
+)
+
+// LastMove represents two tiles that indicate a piece was moved
 type LastMove struct {
-	From Tile
-	To   Tile
+	From     Tile
+	To       Tile
+	MoveType MoveType
 }
 
-//TileFromAN will attempt to get a tile by its algebraic notation (ie: "e5")
+// TileFromAN will attempt to get a tile by its algebraic notation (ie: "e5")
 func TileFromAN(an string) (Tile, error) {
 	tile, ok := tileMap[an]
 	if !ok {

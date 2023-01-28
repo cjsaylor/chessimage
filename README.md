@@ -46,6 +46,18 @@ board.SetLastMove(chessimage.LastMove{
 
 ![](./docs/board_with_moves.png)
 
+To highlight a castling move, use the MoveType field of the LastMove struct. Note that the From and To fields are not being used when highlighting castling moves.
+
+```go
+board.SetLastMove(chessimage.LastMove{
+	MoveType: chessimage.MoveTypeCastlingWK,
+})
+```
+
+[Example](./blob/master/examples/castling.go)
+
+![](./docs/castling.png)
+
 ## Mark Checked
 
 You can highlight a tile as "checked".

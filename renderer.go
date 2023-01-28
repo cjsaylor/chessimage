@@ -130,31 +130,48 @@ func (r *Renderer) highlightCells(o Options) {
 		return
 	}
 
-	var lastMoveFromRank, lastMoveToRank, lastMoveFromFile, lastMoveToFile int
-	if o.Inverted {
-		lastMoveFromRank = r.lastMove.From.rankInverted()
-		lastMoveFromFile = r.lastMove.From.fileInverted()
-		lastMoveToRank = r.lastMove.To.rankInverted()
-		lastMoveToFile = r.lastMove.To.fileInverted()
-	} else {
-		lastMoveFromRank = r.lastMove.From.rank()
-		lastMoveFromFile = r.lastMove.From.file()
-		lastMoveToRank = r.lastMove.To.rank()
-		lastMoveToFile = r.lastMove.To.file()
-	}
+	switch r.lastMove.MoveType {
+	case MoveTypeStandard:
+		var fromRank, toRank, fromFile, toFile int
+		if o.Inverted {
+			fromRank, fromFile = r.lastMove.From.rankFileInv()
+			toRank, toFile = r.lastMove.To.rankFileInv()
+		} else {
+			fromRank, fromFile = r.lastMove.From.rankFile()
+			toRank, toFile = r.lastMove.To.rankFile()
+		}
 
+		r.highlightMove(fromRank, fromFile, toRank, toFile)
+	case MoveTypeCastlingWK:
+		r.highlightMove(7, 4, 7, 6)
+		r.highlightMove(7, 7, 7, 5)
+	case MoveTypeCastlingWQ:
+		r.highlightMove(7, 4, 7, 2)
+		r.highlightMove(7, 0, 7, 3)
+	case MoveTypeCastlingBK:
+		r.highlightMove(0, 4, 0, 6)
+		r.highlightMove(0, 7, 0, 5)
+	case MoveTypeCastlingBQ:
+		r.highlightMove(0, 4, 0, 2)
+		r.highlightMove(0, 0, 0, 3)
+	}
+}
+
+func (r *Renderer) highlightMove(fromRank int, fromFile int, toRank int, toFile int) {
 	gridSize := r.drawSize.gridSize
 	r.context.DrawRectangle(
-		float64(lastMoveFromFile*gridSize),
-		float64(lastMoveFromRank*gridSize),
+		float64(fromFile*gridSize),
+		float64(fromRank*gridSize),
 		float64(gridSize),
-		float64(gridSize))
+		float64(gridSize),
+	)
 	r.context.SetRGB255(colorHighlight[0], colorHighlight[1], colorHighlight[2])
 	r.context.Fill()
 	r.context.DrawRectangle(
-		float64(lastMoveToFile*gridSize),
-		float64(lastMoveToRank*gridSize),
-		float64(gridSize), float64(gridSize))
+		float64(toFile*gridSize),
+		float64(toRank*gridSize),
+		float64(gridSize), float64(gridSize),
+	)
 	r.context.SetRGB255(colorHighlightDim[0], colorHighlightDim[1], colorHighlightDim[2])
 	r.context.Fill()
 }
@@ -165,11 +182,9 @@ func (r *Renderer) drawCheckTile(o Options) {
 	}
 	var checkTileFile, checkTileRank int
 	if o.Inverted {
-		checkTileFile = r.checkTile.fileInverted()
-		checkTileRank = r.checkTile.rankInverted()
+		checkTileFile, checkTileRank = r.checkTile.rankFile()
 	} else {
-		checkTileFile = r.checkTile.file()
-		checkTileRank = r.checkTile.rank()
+		checkTileFile, checkTileRank = r.checkTile.rankFileInv()
 	}
 	gridSize := float64(r.drawSize.gridSize)
 	r.context.DrawRectangle(
@@ -251,11 +266,9 @@ func (r *Renderer) drawPiece(piece position, assetPath string, resizer draw.Scal
 
 	var pieceRank, pieceFile int
 	if inverted {
-		pieceRank = piece.tile.rankInverted()
-		pieceFile = piece.tile.fileInverted()
+		pieceRank, pieceFile = piece.tile.rankFileInv()
 	} else {
-		pieceRank = piece.tile.rank()
-		pieceFile = piece.tile.file()
+		pieceRank, pieceFile = piece.tile.rankFile()
 	}
 
 	r.context.DrawImage(resized, gridSize*(pieceRank)+pieceOffset, gridSize*(pieceFile)+pieceOffset)
