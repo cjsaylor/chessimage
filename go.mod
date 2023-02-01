@@ -1,4 +1,4 @@
-module github.com/cjsaylor/chessimage
+module github.com/hultan/chessimage
 
 go 1.19
 
