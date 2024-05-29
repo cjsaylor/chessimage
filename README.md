@@ -27,7 +27,7 @@ Render the chess board to a png `image.Image` interface.
 ```go
 f, _ := os.Create("board.png")
 defer f.Close()
-image, _ := board.Render(chessimage.Options{AssetPath: "./assets/")})
+image, _ := board.Render(chessimage.Options{AssetPath: "./assets/"})
 png.Encode(f, image)
 ```
 
